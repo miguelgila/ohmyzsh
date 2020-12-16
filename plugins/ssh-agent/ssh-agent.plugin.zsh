@@ -47,8 +47,13 @@ function _add_identities() {
 			[[ ${loaded_sigs[(I)$sig]} -le 0 ]] && not_loaded+="$HOME/.ssh/$id"
 		fi
 	done
-
-	[[ -n "$not_loaded" ]] && ssh-add ${^not_loaded}
+    if [[ "$(uname -s)x" == "Darwinx" ]]
+    then 
+			ssh_add_opts="-K"
+	else
+			ssh_add_opts=""
+    fi
+    [[ -n "$not_loaded" ]] && ssh-add ${ssh_add_opts} ${^not_loaded}
 }
 
 # Get the filename to store/lookup the environment from
